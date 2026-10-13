@@ -1,7 +1,8 @@
 package com.trevorschoeny.simpletotemslot;
 
 import com.trevlar.menukit.api.panel.PanelStyle;
-import com.trevlar.menukit.api.panel.ScreenOrigin;
+import com.trevlar.menukit.api.panel.OutsideRegion;
+import com.trevlar.menukit.api.panel.PanelPosition;
 import com.trevlar.slotkit.api.group.SlotGroupCategory;
 import com.trevlar.slotkit.api.slot.ContainerPanel;
 import com.trevlar.slotkit.api.slot.SlotSpec;
@@ -16,8 +17,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-
-import java.util.function.Supplier;
 
 /**
  * The totem slot: its storage, what it accepts, and its SlotKit panel.
@@ -49,7 +48,8 @@ public final class TotemSlot {
 
     /**
      * Order in the column above the offhand: lower sits nearer the offhand. Totem 10,
-     * elytra 20, room for a firework slot (beryl-split.md, decision 5).
+     * elytra 20, room for a firework slot (beryl-split.md, decision 5; Suite Manager
+     * owns the numbers).
      */
     public static final int COLUMN_ORDER = 10;
 
@@ -64,20 +64,16 @@ public final class TotemSlot {
     /** The totem, saved with the player on the server. Drops on death as vanilla gear does. */
     private static PlayerStorageAttachment<NonNullList<ItemStack>> STORAGE;
 
-    /**
-     * Where the panel sits each frame, set by the client (its placement code names
-     * client classes, which this common class can't). Null until then, and on a server,
-     * where nothing asks.
-     */
-    // ponytail: pixel placement until SlotKit 1.1's ContainerPanel.Builder.on(PLAYER_OFFHAND) lands.
-    public static volatile Supplier<ScreenOrigin> placement = () -> null;
-
     /** Call once from the main entrypoint, on both sides. */
     public static void register() {
         STORAGE = StorageAttachment.playerAttached(SimpleTotemSlot.MOD_ID, "totem", 1);
 
         ContainerPanel.define(PANEL_ID)
-                .at(() -> placement.get(), 0)
+                // The column above the offhand: SlotKit stacks every panel on the offhand
+                // by priority, lowest nearest, and closes the gap when one is absent.
+                // On a screen without the offhand (a chest) the panel is skipped.
+                .on(SlotGroupCategory.PLAYER_OFFHAND)
+                .at(PanelPosition.region(OutsideRegion.TOP_ALIGN_LEFT).priority(COLUMN_ORDER), 0)
                 .visibleWhen(TotemSlotSettings::enabled)
                 // A slot isn't solid, so a transparent panel eats no clicks around it.
                 .opaque(false)
