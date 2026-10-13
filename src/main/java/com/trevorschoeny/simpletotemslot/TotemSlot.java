@@ -84,7 +84,10 @@ public final class TotemSlot {
                         .gate(GATE)
                         .binding(true)
                         // Shift-clicked totems land here first (SlotKit 1.1 routes it).
-                        .shiftClickIn(true))
+                        .shiftClickIn(true)
+                        // The outline is vanilla's own getNoItemIcon pass (SlotSpec.emptyIcon,
+                        // SlotKit 1.1); no mixin of ours needed.
+                        .emptyIcon(EMPTY_ICON))
                 .register();
     }
 
