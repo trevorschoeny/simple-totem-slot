@@ -2,8 +2,7 @@ package com.trevorschoeny.simpletotemslot;
 
 /**
  * Simple Totem Slot's settings, in one place so only this class changes when ConfigKit
- * lands (beryl-split.md, "Settings"). Until then each setting is a plain field at its
- * default. With ConfigKit it becomes:
+ * lands. Until then each setting is a plain field at its default. With ConfigKit it becomes:
  * <pre>
  * public static final Settings S = Settings.of("simpletotemslot");
  * public static final Setting&lt;Boolean&gt; ENABLED = S.bool("enabled", true);      // .server() once ConfigKit has it
@@ -28,7 +27,7 @@ public final class TotemSlotSettings {
     public static boolean hudIcon()    { return hudIcon; }
     public static boolean showButton() { return showButton; }
 
-    // ponytail: setters are not saved anywhere until ConfigKit; a toggle lasts the session.
+    // Setters are not saved anywhere until ConfigKit, so a toggle lasts the session.
     public static void setEnabled(boolean v)    { enabled = v; }
     public static void setHudIcon(boolean v)    { hudIcon = v; }
     public static void setShowButton(boolean v) { showButton = v; }

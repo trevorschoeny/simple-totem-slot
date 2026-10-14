@@ -43,7 +43,7 @@ public final class TotemSlotIp {
 
     public static void register() {
         InventoryPlusApi.addFeatureSwitch(SimpleTotemSlot.MOD_ID, "Totem Slot",
-                // ponytail: Inventory Max's equipment button until the totem button art exists.
+                // Still Inventory Max's equipment button art until the totem button art exists.
                 Identifier.fromNamespaceAndPath(SimpleTotemSlot.MOD_ID, "totem_slot_button"),
                 TotemSlotSettings::enabled, TotemSlotSettings::setEnabled,
                 TotemSlotSettings::showButton, null);

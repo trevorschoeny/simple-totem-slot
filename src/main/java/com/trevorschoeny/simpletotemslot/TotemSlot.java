@@ -48,8 +48,8 @@ public final class TotemSlot {
 
     /**
      * Order in the column above the offhand: lower sits nearer the offhand. Totem 10,
-     * elytra 20, room for a firework slot (beryl-split.md, decision 5; Suite Manager
-     * owns the numbers).
+     * elytra 20, room for a firework slot. The numbers are shared across the mods in
+     * that column, so change them together.
      */
     public static final int COLUMN_ORDER = 10;
 
