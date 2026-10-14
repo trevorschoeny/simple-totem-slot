@@ -73,7 +73,7 @@ public final class TotemSlot {
                 // by priority, lowest nearest, and closes the gap when one is absent.
                 // On a screen without the offhand (a chest) the panel is skipped.
                 .on(SlotGroupCategory.PLAYER_OFFHAND)
-                .at(PanelPosition.region(OutsideRegion.TOP_ALIGN_LEFT).priority(COLUMN_ORDER), 0)
+                .at(PanelPosition.region(OutsideRegion.TOP_CENTER).priority(COLUMN_ORDER), 0)
                 .visibleWhen(TotemSlotSettings::enabled)
                 // A slot isn't solid, so a transparent panel eats no clicks around it.
                 .opaque(false)
