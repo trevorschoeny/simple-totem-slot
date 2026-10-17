@@ -1,10 +1,7 @@
 package com.trevorschoeny.simpletotemslot;
 
-import com.trevlar.menukit.api.panel.PanelStyle;
-import com.trevlar.menukit.api.panel.OutsideRegion;
-import com.trevlar.menukit.api.panel.PanelPosition;
 import com.trevlar.slotkit.api.group.SlotGroupCategory;
-import com.trevlar.slotkit.api.slot.ContainerPanel;
+import com.trevlar.slotkit.api.slot.ParityGroup;
 import com.trevlar.slotkit.api.slot.SlotSpec;
 import com.trevlar.slotkit.api.storage.Storage;
 import com.trevlar.slotkit.api.storage.StorageAttachment;
@@ -19,11 +16,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
 /**
- * The totem slot: its storage, what it accepts, and its SlotKit panel.
+ * The totem slot: its storage and what it accepts.
  *
- * <p>One real synced slot backed by a 1-stack player attachment, declared as a SlotKit
- * {@link ContainerPanel} at common init, so SlotKit builds it on every container menu
- * on both sides with no mixin of ours. Vanilla's equipment loops never see it, so the
+ * <p>One real synced slot backed by a 1-stack player attachment, registered as a SlotKit
+ * {@link ParityGroup} at common init, so SlotKit builds it on every container menu
+ * on both sides with no mixin of ours. Where it shows on screen is the client's
+ * {@code TotemPanel}. Vanilla's equipment loops never see it, so the
  * one vanilla mechanic it needs, the death save, is added in {@code TotemSlotSaveMixin}.
  * Curse of Binding is SlotKit's (declared on the group), and the death drop is SlotKit's
  * attachment default, which follows vanilla and keepInventory.
@@ -35,7 +33,7 @@ public final class TotemSlot {
 
     private TotemSlot() {}
 
-    /** The panel id; SlotKit derives the group's id from it ({@link #GROUP_ID}). */
+    /** The group's owner id, also the client panel's id; SlotKit derives {@link #GROUP_ID} from it. */
     public static final String PANEL_ID = SimpleTotemSlot.MOD_ID + ":totem";
     public static final String GROUP = "slot";
 
@@ -55,7 +53,10 @@ public final class TotemSlot {
 
     /** The slot's group, for SlotKit lookups (operations, Reach, locks). */
     public static final com.trevlar.slotkit.api.group.SlotGroupId.Created GROUP_ID =
-            ContainerPanel.groupId(PANEL_ID, GROUP);
+            ParityGroup.idOf(PANEL_ID, GROUP);
+
+    /** The slot group, set by {@link #register}. */
+    public static ParityGroup TOTEM;
 
     /** The faint totem outline on the empty slot ({@code textures/gui/sprites/container/slot/totem.png}). */
     public static final Identifier EMPTY_ICON =
@@ -68,27 +69,16 @@ public final class TotemSlot {
     public static void register() {
         STORAGE = StorageAttachment.playerAttached(SimpleTotemSlot.MOD_ID, "totem", 1);
 
-        ContainerPanel.define(PANEL_ID)
-                // The column above the offhand: SlotKit stacks every panel on the offhand
-                // by priority, lowest nearest, and closes the gap when one is absent.
-                // On a screen without the offhand (a chest) the panel is skipped.
-                .on(SlotGroupCategory.PLAYER_OFFHAND)
-                .at(PanelPosition.region(OutsideRegion.TOP_CENTER).priority(COLUMN_ORDER), 0)
-                .visibleWhen(TotemSlotSettings::enabled)
-                // A slot isn't solid, so a transparent panel eats no clicks around it.
-                .opaque(false)
-                .style(PanelStyle.NONE)
-                .addSlot(SlotSpec.at(GROUP, CATEGORY)
-                        .storage(p -> STORAGE.bind(p))
-                        .label("Totem slot")
-                        .gate(GATE)
-                        .binding(true)
-                        // Shift-clicked totems land here first (SlotKit 1.1 routes it).
-                        .shiftClickIn(true)
-                        // The outline is vanilla's own getNoItemIcon pass (SlotSpec.emptyIcon,
-                        // SlotKit 1.1); no mixin of ours needed.
-                        .emptyIcon(EMPTY_ICON))
-                .register();
+        // The slot's data only. The panel it shows in is the client's (TotemPanel).
+        TOTEM = ParityGroup.register(PANEL_ID, SlotSpec.at(GROUP, CATEGORY)
+                .storage(p -> STORAGE.bind(p))
+                .label("Totem slot")
+                .gate(GATE)
+                .binding(true)
+                // Shift-clicked totems land here first.
+                .shiftClickIn(true)
+                // The outline is vanilla's own getNoItemIcon pass; no mixin of ours needed.
+                .emptyIcon(EMPTY_ICON));
     }
 
     /**
