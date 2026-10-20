@@ -32,6 +32,7 @@ import java.util.List;
  *   <li><b>The refill.</b> When a save uses up the slot's totem, another moves in from
  *       the inventory through IP's restock search, under IP's restock switch and
  *       locks. Restocking is IP's feature, so there is no refill without IP.</li>
+ *   <li><b>The settings tab</b> in IP's settings menu ({@code TotemSettingsTab}).</li>
  *   <li><b>The column switch.</b> The mod's On/Off in IP's inventory column, hidden
  *       until "Show the Totem Slot button" is on.</li>
  * </ul>
@@ -47,6 +48,7 @@ public final class TotemSlotIp {
                 Identifier.fromNamespaceAndPath(SimpleTotemSlot.MOD_ID, "totem_slot_button"),
                 TotemSlotSettings::enabled, TotemSlotSettings::setEnabled,
                 TotemSlotSettings::showButton, null);
+        TotemSettingsTab.register();
         ClientTickEvents.END_CLIENT_TICK.register(TotemSlotIp::tick);
     }
 
