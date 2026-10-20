@@ -86,8 +86,8 @@ dependencies {
 
 // Self-checks: Fabric client gametests in src/gametest, run with `./gradlew :simple-totem-slot:runClientGameTest`.
 // Each loads a Test Gallery scene's check world (gen.py --checks) and asserts what a station
-// with a matching "check" id says, and takes the survival and creative inventory screenshots
-// (run/.., under build/run/clientGameTest/screenshots). `-PwithElytra` also loads Simple Elytra
+// with a matching "check" id says, and takes inventory and HUD screenshots (survival, creative,
+// offhand) into build/run/clientGameTest/screenshots. `-PwithElytra` also loads Simple Elytra
 // Slot's built jar, so the checks hold the elytra slot directly above the totem slot.
 // The run opens its own window, runs every check, and closes; it never touches run/ or a scene client.
 fabricApi {
