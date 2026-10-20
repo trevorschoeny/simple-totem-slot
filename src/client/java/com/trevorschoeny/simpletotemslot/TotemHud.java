@@ -1,32 +1,28 @@
 package com.trevorschoeny.simpletotemslot;
 
-import com.trevlar.menukit.api.element.ItemDisplay;
 import com.trevlar.menukit.api.hud.HudPanel;
-import com.trevlar.menukit.api.panel.OutsideRegion;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 /**
- * A small totem icon left of the hotbar while the slot holds one. Icon only, no
- * count. Priority 10, so Simple Elytra Slot's icon (priority 20) stacks above it
- * in the same region (menukit docs/recipes.md, "Put an icon beside the hotbar").
+ * The slot's totem on the HUD while it holds one: in a hotbar slot scaled to fit MenuKit's
+ * status column, between the hearts and the hunger bar, just above the XP level number.
+ * Priority 10, nearest the number, so Simple Elytra Slot's (priority 20) stacks above it,
+ * as the two slots stack in the inventory. No count, no durability.
  */
 final class TotemHud {
 
     private TotemHud() {}
 
-    private static final int ICON_SIZE = 12;
-
     static void register() {
         HudPanel.builder(TotemSlot.PANEL_ID + "_hud")
-                .region(OutsideRegion.LEFT_ALIGN_BOTTOM)
+                .statusColumn()
                 .priority(10)
-                .offset(0, -3)
                 .visibleWhen(() -> TotemSlotSettings.hudIcon() && !shown().isEmpty())
-                .element(ItemDisplay.builder().item(TotemHud::shown)
-                        .size(ICON_SIZE, ICON_SIZE).hideCount().hideDurability().build())
+                // 0.8 is the column's shared scale, so every mod's icons match.
+                .slot(0, 0).item(TotemHud::shown).hideCount().hideDurability().scale(0.8f).done()
                 .build();
     }
 

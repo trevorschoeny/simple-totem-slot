@@ -82,6 +82,29 @@ public class TotemSlotChecks implements FabricClientGameTest {
         });
         if (!where.isEmpty()) throw new AssertionError("shift-clicked totem: " + where);
         ctx.setScreen(() -> null);
+        hudScreenshots(ctx, scene);
+    }
+
+    /**
+     * The HUD's status column with the totem in the slot (and, with Simple Elytra Slot, an
+     * elytra in its slot above it), then again with the held-item name up, which the column
+     * should lift clear of the icons. Looks are Trev's call, so these are screenshots only.
+     */
+    private static void hudScreenshots(ClientGameTestContext ctx, SceneWorld.Opened scene) {
+        if (ELYTRA) {
+            // An elytra in hotbar slot 5 (menu slot 41), shift-clicked into the elytra slot.
+            scene.world().getServer().runCommand("item replace entity @p hotbar.5 with minecraft:elytra");
+            ctx.waitTicks(5);
+            ctx.runOnClient(mc -> mc.gameMode.handleContainerInput(
+                    mc.player.inventoryMenu.containerId, 41, 0, ContainerInput.QUICK_MOVE, mc.player));
+        }
+        ctx.waitTicks(10);
+        ctx.takeScreenshot("totem-hud" + SUFFIX);
+        // Selecting the dirt brings up its name above the hotbar.
+        ctx.runOnClient(mc -> mc.player.getInventory().setSelectedSlot(1));
+        ctx.waitTicks(5);
+        ctx.takeScreenshot("totem-hud-item-name" + SUFFIX);
+        ctx.runOnClient(mc -> mc.player.getInventory().setSelectedSlot(0));
     }
 
     /** Station "simpletotemslot:save": a lethal hit with the totem in the slot and empty hands is survived. */
