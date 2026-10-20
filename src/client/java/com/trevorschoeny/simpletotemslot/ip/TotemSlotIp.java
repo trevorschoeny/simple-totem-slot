@@ -77,6 +77,8 @@ public final class TotemSlotIp {
         if (!usedUp) return;
         if (mc.gui.screen() != null) return;                          // gameplay only
         if (!TotemSlotSettings.enabled()) return;
+        // A hidden slot refuses the totem, and the shift-click below would move it elsewhere instead.
+        if (!TotemSlotSettings.showSlot()) return;
         if (!InventoryPlusApi.isItemRestockEnabled()) return;
 
         // A spare may sit in another mod's cycled slots (pockets); offer only the ones

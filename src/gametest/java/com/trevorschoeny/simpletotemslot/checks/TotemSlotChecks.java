@@ -66,6 +66,13 @@ public class TotemSlotChecks implements FabricClientGameTest {
             return !slot.mayPlace(new ItemStack(Items.DIRT)) && slot.mayPlace(new ItemStack(Items.TOTEM_OF_UNDYING));
         });
         if (!refusesDirt) throw new AssertionError("the totem slot should take a totem and refuse dirt");
+
+        // Hidden ("Show the totem slot" off): nothing new goes in, so shift-click can't fill a slot nobody sees.
+        com.trevorschoeny.simpletotemslot.TotemSlotSettings.setShowSlot(false);
+        boolean hiddenRefuses = scene.world().getServer().computeOnServer(server ->
+                !totemSlot(player(server).inventoryMenu.slots).mayPlace(new ItemStack(Items.TOTEM_OF_UNDYING)));
+        com.trevorschoeny.simpletotemslot.TotemSlotSettings.setShowSlot(true);
+        if (!hiddenRefuses) throw new AssertionError("a hidden totem slot should refuse new totems");
     }
 
     /** Station "simpletotemslot:shift_click_in": a shift-clicked totem lands in the slot, not the offhand. */

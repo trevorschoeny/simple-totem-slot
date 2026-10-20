@@ -82,13 +82,13 @@ public final class TotemSlot {
     }
 
     /**
-     * Totems of undying only, one at a time. Placing is refused while the mod is off,
-     * which also stops shift-click routing into the hidden slot; taking out is always
-     * allowed (binding aside).
+     * Totems of undying only, one at a time. Placing is refused while the mod is off or
+     * the slot is hidden, which also stops shift-click routing into a slot nobody can see;
+     * taking out is always allowed (binding aside).
      */
     private static final SlotGate GATE = new SlotGate() {
         @Override public boolean mayPlace(ItemStack stack, GatingContext ctx) {
-            return TotemSlotSettings.enabled() && isTotem(stack);
+            return TotemSlotSettings.enabled() && TotemSlotSettings.showSlot() && isTotem(stack);
         }
         @Override public boolean mayPickup(Player player, GatingContext ctx) { return true; }
         @Override public int maxStackSize(ItemStack stack, int vanillaMax) { return Math.min(1, vanillaMax); }

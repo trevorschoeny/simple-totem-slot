@@ -33,6 +33,7 @@ public final class TotemSlotSettings {
 
     // The defaults, named once so load and reset agree.
     private static final boolean DEFAULT_ENABLED = true;
+    private static final boolean DEFAULT_SHOW_SLOT = true;
     private static final boolean DEFAULT_HUD_ICON = true;
     private static final boolean DEFAULT_SHOW_BUTTON = false;
     // "Use totems anywhere" and where else to look: all off, so out of the box only the
@@ -44,6 +45,9 @@ public final class TotemSlotSettings {
 
     // Off hides the slot and stops its save; the totem stays in the slot.
     private static volatile boolean enabled = DEFAULT_ENABLED;
+    // Off hides the slot from the inventory while a totem already in it still saves you;
+    // nothing new goes in until it's shown again.
+    private static volatile boolean showSlot = DEFAULT_SHOW_SLOT;
     // The totem icon beside the hotbar while the slot holds one.
     private static volatile boolean hudIcon = DEFAULT_HUD_ICON;
     // Inventory Plus's column switch for this mod. Hidden by default.
@@ -56,6 +60,7 @@ public final class TotemSlotSettings {
     private static volatile boolean inEnderChest = DEFAULT_IN_ENDER_CHEST;
 
     public static boolean enabled()    { return enabled; }
+    public static boolean showSlot()   { return showSlot; }
     public static boolean hudIcon()    { return hudIcon; }
     public static boolean showButton() { return showButton; }
     public static boolean anywhere()     { return anywhere; }
@@ -64,6 +69,7 @@ public final class TotemSlotSettings {
     public static boolean inEnderChest() { return inEnderChest; }
 
     public static void setEnabled(boolean v)    { enabled = v; save(); }
+    public static void setShowSlot(boolean v)   { showSlot = v; save(); }
     public static void setHudIcon(boolean v)    { hudIcon = v; save(); }
     public static void setShowButton(boolean v) { showButton = v; save(); }
     public static void setAnywhere(boolean v)     { anywhere = v; save(); }
@@ -74,6 +80,7 @@ public final class TotemSlotSettings {
     /** Every setting back to its default, and saves: Reset to Defaults and IP's Reset everything. */
     public static void reset() {
         enabled = DEFAULT_ENABLED;
+        showSlot = DEFAULT_SHOW_SLOT;
         hudIcon = DEFAULT_HUD_ICON;
         showButton = DEFAULT_SHOW_BUTTON;
         anywhere = DEFAULT_ANYWHERE;
@@ -98,6 +105,7 @@ public final class TotemSlotSettings {
         try {
             JsonObject root = JsonParser.parseString(Files.readString(path)).getAsJsonObject();
             if (root.has("enabled")) enabled = root.get("enabled").getAsBoolean();
+            if (root.has("showSlot")) showSlot = root.get("showSlot").getAsBoolean();
             if (root.has("hudIcon")) hudIcon = root.get("hudIcon").getAsBoolean();
             if (root.has("showButton")) showButton = root.get("showButton").getAsBoolean();
             if (root.has("anywhere")) anywhere = root.get("anywhere").getAsBoolean();
@@ -116,6 +124,7 @@ public final class TotemSlotSettings {
             Files.createDirectories(path.getParent());
             JsonObject root = new JsonObject();
             root.addProperty("enabled", enabled);
+            root.addProperty("showSlot", showSlot);
             root.addProperty("hudIcon", hudIcon);
             root.addProperty("showButton", showButton);
             root.addProperty("anywhere", anywhere);

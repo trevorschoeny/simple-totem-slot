@@ -47,7 +47,8 @@ final class TotemPanel {
             FabricLoader.getInstance().isModLoaded("simpleelytraslot") ? -4 : -13;
 
     static void register() {
-        BooleanSupplier live = () -> TotemSlotSettings.enabled() && ClientSlots.isShown(TotemSlot.GROUP_ID);
+        BooleanSupplier live = () -> TotemSlotSettings.enabled() && TotemSlotSettings.showSlot()
+                && ClientSlots.isShown(TotemSlot.GROUP_ID);
 
         // gap(0) keeps stacked slot panels on vanilla's 18 px pitch; the host's default
         // 2 px gap would set the slot off the grid.
