@@ -26,10 +26,11 @@ import testgallery.SceneWorld;
 import java.lang.reflect.Method;
 
 /**
- * Self-checks for the slot scene (test-gallery/scenes/simple-totem-slot/slot.json), plus the
- * survival and creative inventory screenshots. Runs standalone by default; with
- * {@code -PwithElytra} Simple Elytra Slot is loaded too, and the checks also hold the elytra
- * slot directly above the totem slot. Screenshots carry a "-with-elytra" suffix then.
+ * Self-checks for the slot scene (test-gallery/scenes/simple-totem-slot/slot.json), plus
+ * survival, creative and HUD screenshots. Runs standalone by default; with {@code -PwithElytra}
+ * Simple Elytra Slot is loaded too: the checks also hold its slot directly above the totem slot
+ * in the inventories, and the HUD shots show its box beside the totem's. Screenshots carry a
+ * "-with-elytra" suffix then.
  */
 public class TotemSlotChecks implements FabricClientGameTest {
 
@@ -91,7 +92,7 @@ public class TotemSlotChecks implements FabricClientGameTest {
      * with the held-item name up. Looks are Trev's call, so these are screenshots only.
      */
     private static void hudScreenshots(ClientGameTestContext ctx, SceneWorld.Opened scene) {
-        // A level above 0, so vanilla draws the number the column sits on.
+        // A level above 0, so the shots show the HUD as it usually looks, the number included.
         scene.world().getServer().runCommand("xp set @p 12 levels");
         if (ELYTRA) {
             // An elytra in hotbar slot 5 (menu slot 41), shift-clicked into the elytra slot.
@@ -130,7 +131,8 @@ public class TotemSlotChecks implements FabricClientGameTest {
 
     /**
      * The creative inventory's Survival Inventory tab shows the slot right of the armor, centred
-     * on its height (above the offhand there's no room under the tab row). Not a scene station check: how it looks stays in Trev's walk.
+     * on its height (above the offhand there's no room under the tab row). Not a scene station
+     * check: how it looks stays in Trev's walk.
      */
     private static void creativeSlot(ClientGameTestContext ctx, SceneWorld.Opened scene) {
         // Put the scene's totem in the slot first, so the screenshot shows it filled.
