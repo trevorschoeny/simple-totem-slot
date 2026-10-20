@@ -86,9 +86,9 @@ public class TotemSlotChecks implements FabricClientGameTest {
     }
 
     /**
-     * The HUD's status column with the totem in the slot (and, with Simple Elytra Slot, an
-     * elytra in its slot above it), then again with the held-item name up, which the column
-     * should lift clear of the icons. Looks are Trev's call, so these are screenshots only.
+     * The HUD row left of the hotbar with the totem in the slot (and, with Simple Elytra Slot,
+     * an elytra in its slot beside it), lifted above the offhand slot when that shows, and
+     * with the held-item name up. Looks are Trev's call, so these are screenshots only.
      */
     private static void hudScreenshots(ClientGameTestContext ctx, SceneWorld.Opened scene) {
         // A level above 0, so vanilla draws the number the column sits on.
@@ -100,8 +100,14 @@ public class TotemSlotChecks implements FabricClientGameTest {
             ctx.runOnClient(mc -> mc.gameMode.handleContainerInput(
                     mc.player.inventoryMenu.containerId, 41, 0, ContainerInput.QUICK_MOVE, mc.player));
         }
+        scene.world().getServer().runCommand("gamerule sendCommandFeedback false");
         ctx.waitTicks(10);
         ctx.takeScreenshot("totem-hud" + SUFFIX);
+        // With the offhand slot showing, the row lifts above it.
+        scene.world().getServer().runCommand("item replace entity @p weapon.offhand with minecraft:shield");
+        ctx.waitTicks(5);
+        ctx.takeScreenshot("totem-hud-offhand" + SUFFIX);
+        scene.world().getServer().runCommand("item replace entity @p weapon.offhand with minecraft:air");
         // Selecting the dirt brings up its name above the hotbar.
         ctx.runOnClient(mc -> mc.player.getInventory().setSelectedSlot(1));
         ctx.waitTicks(5);
