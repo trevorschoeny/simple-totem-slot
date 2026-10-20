@@ -24,8 +24,9 @@ import java.util.function.Consumer;
 
 /**
  * The Totem Slot tab in Inventory Plus's settings menu: the frame IP's tabs have (title,
- * description, Reset to Defaults, On/Off, a line), then the two settings, greyed while
- * the mod is off. Reads {@link TotemSlotSettings} every frame and writes through its
+ * description, Reset to Defaults, On/Off, a line), then the settings, greyed while the
+ * mod is off: the hotbar icon, the column button, and "Use totems anywhere" with the three
+ * places it can also look. Reads {@link TotemSlotSettings} every frame and writes through its
  * setters, which save.
  *
  * <p>ponytail: the frame is laid out by hand, as Hotbar Pockets' tab does. With a third
@@ -51,6 +52,7 @@ final class TotemSettingsTab {
 
     private static List<PanelElement> body() {
         BooleanSupplier off = () -> !TotemSlotSettings.enabled();
+        BooleanSupplier offOrNotAnywhere = () -> off.getAsBoolean() || !TotemSlotSettings.anywhere();
         return List.of(
                 TextLabel.builder().at(0, 0)
                         .text(Component.literal("Totem Slot").withStyle(ChatFormatting.BOLD))
@@ -73,7 +75,17 @@ final class TotemSettingsTab {
                 checkbox(56, "Show a totem icon beside the hotbar",
                         TotemSlotSettings::hudIcon, TotemSlotSettings::setHudIcon, off),
                 checkbox(72, "Show the Totem Slot button",
-                        TotemSlotSettings::showButton, TotemSlotSettings::setShowButton, off));
+                        TotemSlotSettings::showButton, TotemSlotSettings::setShowButton, off),
+                // After the hands and the slot. The three under it widen the search and grey
+                // out while it's off.
+                checkbox(96, "Use totems anywhere in your inventory",
+                        TotemSlotSettings::anywhere, TotemSlotSettings::setAnywhere, off),
+                checkbox(112, "Also inside shulker boxes",
+                        TotemSlotSettings::inShulkers, TotemSlotSettings::setInShulkers, offOrNotAnywhere),
+                checkbox(128, "Also inside bundles",
+                        TotemSlotSettings::inBundles, TotemSlotSettings::setInBundles, offOrNotAnywhere),
+                checkbox(144, "Also in your ender chest",
+                        TotemSlotSettings::inEnderChest, TotemSlotSettings::setInEnderChest, offOrNotAnywhere));
     }
 
     private static PanelElement checkbox(int y, String label, BooleanSupplier get, Consumer<Boolean> set,

@@ -19,7 +19,8 @@ import java.nio.file.Path;
  *
  * <p>On/Off is read on the side whose code runs: the server for the save and the
  * shift-click routing, the client for showing the slot. In singleplayer both read this
- * one file; on a dedicated server the server's own file decides the save.
+ * one file; on a dedicated server the server's own file decides the save, the "use totems
+ * anywhere" options included.
  *
  * <p>Changed from the Totem Slot tab in Inventory Plus's settings menu when IP is
  * installed. Without IP there's no menu and the defaults (or the file) apply.
@@ -34,6 +35,12 @@ public final class TotemSlotSettings {
     private static final boolean DEFAULT_ENABLED = true;
     private static final boolean DEFAULT_HUD_ICON = true;
     private static final boolean DEFAULT_SHOW_BUTTON = false;
+    // "Use totems anywhere" and where else to look: all off, so out of the box only the
+    // hands and the slot save you.
+    private static final boolean DEFAULT_ANYWHERE = false;
+    private static final boolean DEFAULT_IN_SHULKERS = false;
+    private static final boolean DEFAULT_IN_BUNDLES = false;
+    private static final boolean DEFAULT_IN_ENDER_CHEST = false;
 
     // Off hides the slot and stops its save; the totem stays in the slot.
     private static volatile boolean enabled = DEFAULT_ENABLED;
@@ -41,20 +48,38 @@ public final class TotemSlotSettings {
     private static volatile boolean hudIcon = DEFAULT_HUD_ICON;
     // Inventory Plus's column switch for this mod. Hidden by default.
     private static volatile boolean showButton = DEFAULT_SHOW_BUTTON;
+    // After the hands and the slot, a totem anywhere in the inventory saves you too
+    // (TotemSearch). The three below widen it, and do nothing while this is off.
+    private static volatile boolean anywhere = DEFAULT_ANYWHERE;
+    private static volatile boolean inShulkers = DEFAULT_IN_SHULKERS;
+    private static volatile boolean inBundles = DEFAULT_IN_BUNDLES;
+    private static volatile boolean inEnderChest = DEFAULT_IN_ENDER_CHEST;
 
     public static boolean enabled()    { return enabled; }
     public static boolean hudIcon()    { return hudIcon; }
     public static boolean showButton() { return showButton; }
+    public static boolean anywhere()     { return anywhere; }
+    public static boolean inShulkers()   { return inShulkers; }
+    public static boolean inBundles()    { return inBundles; }
+    public static boolean inEnderChest() { return inEnderChest; }
 
     public static void setEnabled(boolean v)    { enabled = v; save(); }
     public static void setHudIcon(boolean v)    { hudIcon = v; save(); }
     public static void setShowButton(boolean v) { showButton = v; save(); }
+    public static void setAnywhere(boolean v)     { anywhere = v; save(); }
+    public static void setInShulkers(boolean v)   { inShulkers = v; save(); }
+    public static void setInBundles(boolean v)    { inBundles = v; save(); }
+    public static void setInEnderChest(boolean v) { inEnderChest = v; save(); }
 
     /** Every setting back to its default, and saves: Reset to Defaults and IP's Reset everything. */
     public static void reset() {
         enabled = DEFAULT_ENABLED;
         hudIcon = DEFAULT_HUD_ICON;
         showButton = DEFAULT_SHOW_BUTTON;
+        anywhere = DEFAULT_ANYWHERE;
+        inShulkers = DEFAULT_IN_SHULKERS;
+        inBundles = DEFAULT_IN_BUNDLES;
+        inEnderChest = DEFAULT_IN_ENDER_CHEST;
         save();
     }
 
@@ -75,6 +100,10 @@ public final class TotemSlotSettings {
             if (root.has("enabled")) enabled = root.get("enabled").getAsBoolean();
             if (root.has("hudIcon")) hudIcon = root.get("hudIcon").getAsBoolean();
             if (root.has("showButton")) showButton = root.get("showButton").getAsBoolean();
+            if (root.has("anywhere")) anywhere = root.get("anywhere").getAsBoolean();
+            if (root.has("inShulkers")) inShulkers = root.get("inShulkers").getAsBoolean();
+            if (root.has("inBundles")) inBundles = root.get("inBundles").getAsBoolean();
+            if (root.has("inEnderChest")) inEnderChest = root.get("inEnderChest").getAsBoolean();
         } catch (IOException | JsonSyntaxException | IllegalStateException | ClassCastException
                  | UnsupportedOperationException ex) {
             SimpleTotemSlot.LOGGER.error("[simpletotemslot] failed to read {}, using defaults", path, ex);
@@ -89,6 +118,10 @@ public final class TotemSlotSettings {
             root.addProperty("enabled", enabled);
             root.addProperty("hudIcon", hudIcon);
             root.addProperty("showButton", showButton);
+            root.addProperty("anywhere", anywhere);
+            root.addProperty("inShulkers", inShulkers);
+            root.addProperty("inBundles", inBundles);
+            root.addProperty("inEnderChest", inEnderChest);
             Files.writeString(path, GSON.toJson(root));
         } catch (IOException ex) {
             SimpleTotemSlot.LOGGER.error("[simpletotemslot] failed to write {}, settings won't persist", path, ex);

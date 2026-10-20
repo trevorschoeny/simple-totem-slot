@@ -99,20 +99,23 @@ public final class TotemSlot {
         return stack.is(Items.TOTEM_OF_UNDYING);
     }
 
-    /** The totem in the slot, or EMPTY. A copy: change it through {@link #consume}. */
+    /** The totem in the slot, or EMPTY. A copy: change it through {@link #take}. */
     public static ItemStack get(Player player) {
         return STORAGE.bind(player).getStack(0);
     }
 
     /**
-     * Uses up one totem. The storage read is a detached copy, so the shrink only sticks
-     * (and syncs to the client) once {@code setStack} writes it back.
+     * Uses up the slot's totem and returns a one-count copy of it, or EMPTY when the slot
+     * holds none. The storage read is a detached copy, so the shrink only sticks (and
+     * syncs to the client) once {@code setStack} writes it back.
      */
-    public static void consume(Player player) {
+    public static ItemStack take(Player player) {
         Storage storage = STORAGE.bind(player);
         ItemStack totem = storage.getStack(0);
-        if (totem.isEmpty()) return;
+        if (totem.isEmpty()) return ItemStack.EMPTY;
+        ItemStack used = totem.copyWithCount(1);
         totem.shrink(1);
         storage.setStack(0, totem);
+        return used;
     }
 }

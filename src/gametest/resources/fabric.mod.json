@@ -5,7 +5,8 @@
   "environment": "client",
   "entrypoints": {
     "fabric-client-gametest": [
-      "com.trevorschoeny.simpletotemslot.checks.TotemSlotChecks"
+      "com.trevorschoeny.simpletotemslot.checks.TotemSlotChecks",
+      "com.trevorschoeny.simpletotemslot.checks.TotemAnywhereChecks"
     ]
   }
 }

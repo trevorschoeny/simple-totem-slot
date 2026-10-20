@@ -1,5 +1,6 @@
 package com.trevorschoeny.simpletotemslot.mixin;
 
+import com.trevorschoeny.simpletotemslot.TotemSearch;
 import com.trevorschoeny.simpletotemslot.TotemSlot;
 import com.trevorschoeny.simpletotemslot.TotemSlotSettings;
 
@@ -37,6 +38,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  *       ({@code /kill}), as a held totem can't either.</li>
  * </ul>
  *
+ * After the slot, a totem elsewhere on the player when "Use totems anywhere" is on
+ * ({@code TotemSearch}), nearest first.
+ *
  * Works in survival and creative: the slot's contents are server-authoritative.
  */
 @Mixin(LivingEntity.class)
@@ -50,12 +54,12 @@ public abstract class TotemSlotSaveMixin {
         LivingEntity self = (LivingEntity) (Object) this;
         if (!(self instanceof Player player)) return;
 
-        ItemStack totem = TotemSlot.get(player);
-        DeathProtection protection = totem.get(DataComponents.DEATH_PROTECTION);
-        if (protection == null) return;                                 // slot empty
-
-        ItemStack used = totem.copy();
-        TotemSlot.consume(player);
+        // The slot first, then anywhere else the settings allow (TotemSearch). Either
+        // way one totem is used up here and `used` is a one-count copy of it.
+        ItemStack used = TotemSlot.take(player);
+        if (used.isEmpty()) used = TotemSearch.take(player);
+        DeathProtection protection = used.get(DataComponents.DEATH_PROTECTION);
+        if (protection == null) return;                                 // no totem anywhere
 
         // The same revival as vanilla's checkTotemDeathProtection.
         if (self instanceof ServerPlayer sp) {
