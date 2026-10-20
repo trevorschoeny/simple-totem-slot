@@ -98,8 +98,8 @@ public class TotemSlotChecks implements FabricClientGameTest {
     }
 
     /**
-     * The creative inventory's Survival Inventory tab shows the slot in the same place, directly
-     * above the offhand. Not a scene station check: how it looks stays in Trev's walk.
+     * The creative inventory's Survival Inventory tab shows the slot right of the armor, centred
+     * on its height (above the offhand there's no room under the tab row). Not a scene station check: how it looks stays in Trev's walk.
      */
     private static void creativeSlot(ClientGameTestContext ctx, SceneWorld.Opened scene) {
         // Put the scene's totem in the slot first, so the screenshot shows it filled.
@@ -116,10 +116,24 @@ public class TotemSlotChecks implements FabricClientGameTest {
         ctx.takeScreenshot("totem-creative" + SUFFIX);
         ctx.runOnClient(mc -> {
             var slots = ((AbstractContainerScreen<?>) mc.gui.screen()).getMenu().slots;
-            // The tab wraps the inventory menu's slots in order, numbered by menu index, so the
-            // offhand's wrapper is the one at the inventory menu's offhand index.
-            Slot offhand = slots.get(InventoryMenu.SHIELD_SLOT);
-            assertColumnIn(slots, offhand);
+            // The tab wraps the inventory menu's slots in order, by menu index: 7 and 8 are the
+            // leggings and boots, the right-hand armor column.
+            Slot legs = slots.get(7), feet = slots.get(8);
+            Slot totem = totemSlot(slots);
+            if (totem == null) throw new AssertionError("creative inventory tab: no totem slot");
+            // Right of the armor, centred on its height: alone level with the middle of the
+            // armor, or the lower of a pair straddling it.
+            int middle = (legs.y + feet.y + 1) / 2;   // 19.5 rounds to 20, level with the offhand
+            int expectY = ELYTRA ? middle + 9 : middle;
+            if (totem.x != legs.x + 18 || totem.y != expectY) {
+                throw new AssertionError("creative totem slot at (" + totem.x + ", " + totem.y + "), expected ("
+                        + (legs.x + 18) + ", " + expectY + "): right of the armor, centred on it");
+            }
+            if (ELYTRA) {
+                Slot elytra = createdSlot(slots, "simpleelytraslot:");
+                if (elytra == null) throw new AssertionError("creative inventory tab: no elytra slot");
+                assertAbove(elytra, totem, "elytra slot", "totem slot");
+            }
         });
         ctx.setScreen(() -> null);
     }
