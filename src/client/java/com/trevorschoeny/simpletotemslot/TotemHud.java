@@ -20,9 +20,11 @@ final class TotemHud {
         HudPanel.builder(TotemSlot.PANEL_ID + "_hud")
                 .statusColumn()
                 .priority(10)
+                // Down onto the level number: the column leaves room for 0.8 boxes; these are smaller.
+                .offset(0, 3)
                 .visibleWhen(() -> TotemSlotSettings.hudIcon() && !shown().isEmpty())
-                // 0.8 is the column's shared scale, so every mod's icons match.
-                .slot(0, 0).item(TotemHud::shown).hideCount().hideDurability().scale(0.8f).done()
+                // 0.55: a box about heart-sized, so it sits beside the hearts row. Simple Elytra Slot uses the same.
+                .slot(0, 0).item(TotemHud::shown).hideCount().hideDurability().scale(0.55f).done()
                 .build();
     }
 

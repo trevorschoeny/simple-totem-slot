@@ -91,6 +91,8 @@ public class TotemSlotChecks implements FabricClientGameTest {
      * should lift clear of the icons. Looks are Trev's call, so these are screenshots only.
      */
     private static void hudScreenshots(ClientGameTestContext ctx, SceneWorld.Opened scene) {
+        // A level above 0, so vanilla draws the number the column sits on.
+        scene.world().getServer().runCommand("xp set @p 12 levels");
         if (ELYTRA) {
             // An elytra in hotbar slot 5 (menu slot 41), shift-clicked into the elytra slot.
             scene.world().getServer().runCommand("item replace entity @p hotbar.5 with minecraft:elytra");
