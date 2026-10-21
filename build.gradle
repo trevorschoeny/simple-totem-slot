@@ -125,7 +125,7 @@ processResources {
 // Lead @ Trevlar Mods owns the publish.
 modrinth {
     token = System.getenv("MODRINTH_TOKEN")
-    projectId = ""
+    projectId = "IkqexJMd"
     versionNumber = property('simpletotemslot_version')
     versionName = "Simple Totem Slot ${property('simpletotemslot_version')}"
     versionType = "release"
