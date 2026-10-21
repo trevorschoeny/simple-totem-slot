@@ -137,8 +137,8 @@ public class TotemSlotChecks implements FabricClientGameTest {
     }
 
     /**
-     * The creative inventory's Survival Inventory tab shows the slot right of the armor, centred
-     * on its height (above the offhand there's no room under the tab row). Not a scene station
+     * The creative inventory's Survival Inventory tab shows the slot right of the armor, top-aligned
+     * with it (above the offhand there's no room under the tab row). Not a scene station
      * check: how it looks stays in Trev's walk.
      */
     private static void creativeSlot(ClientGameTestContext ctx, SceneWorld.Opened scene) {
@@ -151,23 +151,23 @@ public class TotemSlotChecks implements FabricClientGameTest {
             return new CreativeModeInventoryScreen(mc.player, mc.player.connection.enabledFeatures(), false);
         });
         ctx.waitForScreen(CreativeModeInventoryScreen.class);
-        ctx.runOnClient(mc -> selectInventoryTab((CreativeModeInventoryScreen) mc.gui.screen()));
+        ctx.runOnClient(mc -> selectTab((CreativeModeInventoryScreen) mc.gui.screen(), CreativeModeTabs.allTabs().stream()
+                .filter(t -> t.getType() == CreativeModeTab.Type.INVENTORY).findFirst().orElseThrow()));
         ctx.waitTicks(5);
         ctx.takeScreenshot("totem-creative" + SUFFIX);
         ctx.runOnClient(mc -> {
             var slots = ((AbstractContainerScreen<?>) mc.gui.screen()).getMenu().slots;
-            // The tab wraps the inventory menu's slots in order, by menu index: 7 and 8 are the
-            // leggings and boots, the right-hand armor column.
-            Slot legs = slots.get(7), feet = slots.get(8);
+            // The tab wraps the inventory menu's slots in order, by menu index: 7 is the
+            // leggings, top of the right-hand armor column.
+            Slot legs = slots.get(7);
             Slot totem = totemSlot(slots);
             if (totem == null) throw new AssertionError("creative inventory tab: no totem slot");
-            // Right of the armor, centred on its height: alone level with the middle of the
-            // armor, or the lower of a pair straddling it.
-            int middle = (legs.y + feet.y + 1) / 2;   // 19.5 rounds to 20, level with the offhand
-            int expectY = ELYTRA ? middle + 9 : middle;
+            // Right of the armor, top-aligned with it: alone level with the leggings, or under
+            // the elytra in a pair.
+            int expectY = ELYTRA ? legs.y + 18 : legs.y;
             if (totem.x != legs.x + 18 || totem.y != expectY) {
                 throw new AssertionError("creative totem slot at (" + totem.x + ", " + totem.y + "), expected ("
-                        + (legs.x + 18) + ", " + expectY + "): right of the armor, centred on it");
+                        + (legs.x + 18) + ", " + expectY + "): right of the armor, top-aligned with it");
             }
             if (ELYTRA) {
                 Slot elytra = createdSlot(slots, "simpleelytraslot:");
@@ -175,20 +175,28 @@ public class TotemSlotChecks implements FabricClientGameTest {
                 assertAbove(elytra, totem, "elytra slot", "totem slot");
             }
         });
+
+        // An item tab has only the hotbar: no totem slot on its menu, so the panel has nothing to show.
+        ctx.runOnClient(mc -> selectTab((CreativeModeInventoryScreen) mc.gui.screen(), CreativeModeTabs.getDefaultTab()));
+        ctx.waitTicks(5);
+        ctx.takeScreenshot("totem-creative-item-tab" + SUFFIX);
+        ctx.runOnClient(mc -> {
+            if (totemSlot(((AbstractContainerScreen<?>) mc.gui.screen()).getMenu().slots) != null) {
+                throw new AssertionError("creative item tab: the totem slot is on its menu");
+            }
+        });
         ctx.setScreen(() -> null);
     }
 
-    // The creative screen opens on its last tab; the Survival Inventory tab is chosen through
-    // the screen's own (private) selectTab, the same call a click on the tab makes.
-    private static void selectInventoryTab(CreativeModeInventoryScreen screen) {
+    // The creative screen opens on its last tab; a tab is chosen through the screen's own
+    // (private) selectTab, the same call a click on the tab makes.
+    private static void selectTab(CreativeModeInventoryScreen screen, CreativeModeTab tab) {
         try {
-            CreativeModeTab inventory = CreativeModeTabs.allTabs().stream()
-                    .filter(t -> t.getType() == CreativeModeTab.Type.INVENTORY).findFirst().orElseThrow();
             Method select = CreativeModeInventoryScreen.class.getDeclaredMethod("selectTab", CreativeModeTab.class);
             select.setAccessible(true);
-            select.invoke(screen, inventory);
+            select.invoke(screen, tab);
         } catch (ReflectiveOperationException e) {
-            throw new AssertionError("could not select the creative Survival Inventory tab", e);
+            throw new AssertionError("could not select a creative tab", e);
         }
     }
 
