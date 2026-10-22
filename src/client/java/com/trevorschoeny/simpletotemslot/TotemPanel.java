@@ -15,12 +15,9 @@ import com.trevlar.slotkit.api.slot.SlotPlacement;
  * The totem slot's part of {@code trevlar:gear}, the panel it shares with Simple Elytra Slot:
  * one column, elytra on top (order 10), totem below it (order 20), nearest the offhand.
  * Above the offhand in survival; right of the armour in creative, where the offhand has no
- * room above it under the tab row (Trev, 2026-10-20), top-aligned with it. A screen without
+ * room above it under the tab row, centred on the armour's height (Trev, 2026-10-20). A screen without
  * the offhand or the armour (a chest, a creative item tab) has no group to place it on, so it
  * doesn't show.
- *
- * <p>ponytail: Trev's creative column was centred on the armour; that waits on a centred side
- * region in MenuKit, and then both mods change one word.
  *
  * <p>Everything after {@code visibleWhen} is the panel's own declaration and matches Simple
  * Elytra Slot's exactly; MenuKit warns if the two differ.
@@ -40,7 +37,7 @@ final class TotemPanel {
                 .in(ModeScope.SURVIVAL, SlotPlacement.group(SlotGroupCategory.PLAYER_OFFHAND,
                         PanelPosition.region(OutsideRegion.TOP_CENTER).gap(0)))
                 .in(ModeScope.CREATIVE, SlotPlacement.group(SlotGroupCategory.PLAYER_ARMOR,
-                        PanelPosition.region(OutsideRegion.RIGHT_ALIGN_TOP).gap(0)))
+                        PanelPosition.region(OutsideRegion.RIGHT_CENTER).gap(0)))
                 .style(PanelStyle.NONE)
                 .vertical()
                 .gap(0)

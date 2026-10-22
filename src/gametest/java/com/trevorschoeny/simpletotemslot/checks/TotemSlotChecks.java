@@ -137,8 +137,8 @@ public class TotemSlotChecks implements FabricClientGameTest {
     }
 
     /**
-     * The creative inventory's Survival Inventory tab shows the slot right of the armor, top-aligned
-     * with it (above the offhand there's no room under the tab row). Not a scene station
+     * The creative inventory's Survival Inventory tab shows the slot right of the armor, centred
+     * on its height (above the offhand there's no room under the tab row). Not a scene station
      * check: how it looks stays in Trev's walk.
      */
     private static void creativeSlot(ClientGameTestContext ctx, SceneWorld.Opened scene) {
@@ -157,17 +157,20 @@ public class TotemSlotChecks implements FabricClientGameTest {
         ctx.takeScreenshot("totem-creative" + SUFFIX);
         ctx.runOnClient(mc -> {
             var slots = ((AbstractContainerScreen<?>) mc.gui.screen()).getMenu().slots;
-            // The tab wraps the inventory menu's slots in order, by menu index: 7 is the
-            // leggings, top of the right-hand armor column.
-            Slot legs = slots.get(7);
+            // The tab wraps the inventory menu's slots in order, by menu index: 7 and 8 are the
+            // leggings and boots, the right-hand armor column.
+            Slot legs = slots.get(7), feet = slots.get(8);
             Slot totem = totemSlot(slots);
             if (totem == null) throw new AssertionError("creative inventory tab: no totem slot");
-            // Right of the armor, top-aligned with it: alone level with the leggings, or under
-            // the elytra in a pair.
-            int expectY = ELYTRA ? legs.y + 18 : legs.y;
-            if (totem.x != legs.x + 18 || totem.y != expectY) {
-                throw new AssertionError("creative totem slot at (" + totem.x + ", " + totem.y + "), expected ("
-                        + (legs.x + 18) + ", " + expectY + "): right of the armor, top-aligned with it");
+            // Right of the armor, the column centred on the armor's height: the totem alone,
+            // or the elytra over the totem. Centres in doubled pixels, so a half-pixel shows.
+            int top = ELYTRA ? totem.y - 18 : totem.y;
+            int columnCentre2 = 2 * top + 18 * (ELYTRA ? 2 : 1) - 2;   // frames start 1 px above a slot
+            int armorCentre2 = legs.y + feet.y + 16;                     // legs' frame top + boots' frame bottom
+            if (totem.x != legs.x + 18 || Math.abs(columnCentre2 - armorCentre2) > 1) {
+                throw new AssertionError("creative totem slot at (" + totem.x + ", " + totem.y + "): expected x "
+                        + (legs.x + 18) + " and the column centred on the armor (centre " + armorCentre2 / 2f
+                        + ", column's " + columnCentre2 / 2f + ")");
             }
             if (ELYTRA) {
                 Slot elytra = createdSlot(slots, "simpleelytraslot:");
