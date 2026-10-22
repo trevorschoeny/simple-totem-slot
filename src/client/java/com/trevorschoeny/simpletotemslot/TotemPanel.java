@@ -14,9 +14,9 @@ import com.trevlar.slotkit.api.slot.SlotPlacement;
 /**
  * The totem slot's part of {@code trevlar:gear}, the panel it shares with Simple Elytra Slot:
  * one column, elytra on top (order 10), totem below it (order 20), nearest the offhand.
- * Above the offhand in survival; right of the armour in creative, where the offhand has no
- * room above it under the tab row, centred on the armour's height (Trev, 2026-10-20). A screen without
- * the offhand or the armour (a chest, a creative item tab) has no group to place it on, so it
+ * Above the offhand in survival; right of the armor in creative, where the offhand has no
+ * room above it under the tab row, centered on the armor's height (Trev, 2026-10-20). A screen without
+ * the offhand or the armor (a chest, a creative item tab) has no group to place it on, so it
  * doesn't show.
  *
  * <p>Everything after {@code visibleWhen} is the panel's own declaration and matches Simple

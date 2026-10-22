@@ -137,7 +137,7 @@ public class TotemSlotChecks implements FabricClientGameTest {
     }
 
     /**
-     * The creative inventory's Survival Inventory tab shows the slot right of the armor, centred
+     * The creative inventory's Survival Inventory tab shows the slot right of the armor, centered
      * on its height (above the offhand there's no room under the tab row). Not a scene station
      * check: how it looks stays in Trev's walk.
      */
@@ -162,15 +162,15 @@ public class TotemSlotChecks implements FabricClientGameTest {
             Slot legs = slots.get(7), feet = slots.get(8);
             Slot totem = totemSlot(slots);
             if (totem == null) throw new AssertionError("creative inventory tab: no totem slot");
-            // Right of the armor, the column centred on the armor's height: the totem alone,
-            // or the elytra over the totem. Centres in doubled pixels, so a half-pixel shows.
+            // Right of the armor, the column centered on the armor's height: the totem alone,
+            // or the elytra over the totem. Centers in doubled pixels, so a half-pixel shows.
             int top = ELYTRA ? totem.y - 18 : totem.y;
-            int columnCentre2 = 2 * top + 18 * (ELYTRA ? 2 : 1) - 2;   // frames start 1 px above a slot
-            int armorCentre2 = legs.y + feet.y + 16;                     // legs' frame top + boots' frame bottom
-            if (totem.x != legs.x + 18 || Math.abs(columnCentre2 - armorCentre2) > 1) {
+            int columnCenter2 = 2 * top + 18 * (ELYTRA ? 2 : 1) - 2;   // frames start 1 px above a slot
+            int armorCenter2 = legs.y + feet.y + 16;                     // legs' frame top + boots' frame bottom
+            if (totem.x != legs.x + 18 || Math.abs(columnCenter2 - armorCenter2) > 1) {
                 throw new AssertionError("creative totem slot at (" + totem.x + ", " + totem.y + "): expected x "
-                        + (legs.x + 18) + " and the column centred on the armor (centre " + armorCentre2 / 2f
-                        + ", column's " + columnCentre2 / 2f + ")");
+                        + (legs.x + 18) + " and the column centered on the armor (center " + armorCenter2 / 2f
+                        + ", column's " + columnCenter2 / 2f + ")");
             }
             if (ELYTRA) {
                 Slot elytra = createdSlot(slots, "simpleelytraslot:");

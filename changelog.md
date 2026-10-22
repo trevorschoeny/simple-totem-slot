@@ -10,4 +10,6 @@ First release.
 - With Inventory Plus, Restock refills the slot and the settings are on a Totem Slot tab.
 - With Simple Elytra Slot, the two slots share one column above the offhand.
 
-Requires MenuKit 7.3.0 or newer and SlotKit 2.0.0 or newer.
+### Changed
+
+- Requires MenuKit 7.3.0 or newer and SlotKit 2.0.0 or newer.

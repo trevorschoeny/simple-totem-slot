@@ -24,7 +24,7 @@ import java.util.function.Consumer;
 
 /**
  * The Totem Slot tab in Inventory Plus's settings menu: the frame IP's tabs have (title,
- * description, Reset to Defaults, On/Off, a line), then the settings, greyed while the
+ * description, Reset to Defaults, On/Off, a line), then the settings, grayed while the
  * mod is off: the slot itself, the hotbar icon, the column button, and "Use totems anywhere" with the three
  * places it can also look. Reads {@link TotemSlotSettings} every frame and writes through its
  * setters, which save.
@@ -39,7 +39,7 @@ final class TotemSettingsTab {
     /** The tab's id: IP's column switch opens it on Ctrl-click. */
     static final String TAB_ID = SimpleTotemSlot.MOD_ID;
 
-    /** A divider's colour on the inventory look, as on IP's own tabs. */
+    /** A divider's color on the inventory look, as on IP's own tabs. */
     private static final int LINE_COLOR = 0xFF8B8B8B;
 
     /** Call once from client init, before the menu can be opened. */
@@ -78,7 +78,7 @@ final class TotemSettingsTab {
                         TotemSlotSettings::hudIcon, TotemSlotSettings::setHudIcon, off),
                 checkbox(88, "Show the Totem Slot button",
                         TotemSlotSettings::showButton, TotemSlotSettings::setShowButton, off),
-                // After the hands and the slot. The three under it widen the search and grey
+                // After the hands and the slot. The three under it widen the search and gray
                 // out while it's off.
                 checkbox(112, "Use totems anywhere in your inventory",
                         TotemSlotSettings::anywhere, TotemSlotSettings::setAnywhere, off),
