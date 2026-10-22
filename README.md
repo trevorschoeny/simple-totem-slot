@@ -34,8 +34,8 @@ It has to be installed on the server as well as the client. In singleplayer, you
 ## Requirements
 
 - [Fabric API](https://modrinth.com/mod/fabric-api)
-- [MenuKit](https://modrinth.com/mod/menukit) 7.3.0 or newer, below 8.0.0, which draws the slot and the icon beside the hotbar.
-- [SlotKit](https://modrinth.com/mod/slotkit) 2.0.0 or newer, below 3.0.0, which adds the slot to your inventory, saves it with your player on the server, and checks that a joining player has the mod.
+- [MenuKit](https://modrinth.com/mod/menukit) 7.4.0 or newer, below 8.0.0, which draws the slot and the icon beside the hotbar.
+- [SlotKit](https://modrinth.com/mod/slotkit) 2.1.0 or newer, below 3.0.0, which adds the slot to your inventory, saves it with your player on the server, and checks that a joining player has the mod.
 
 ## Pairs well with
 
