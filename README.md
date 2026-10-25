@@ -4,51 +4,51 @@ Simple Totem Slot is a simple totem slot made for the Inventory Plus ecosystem. 
 
 It has to be installed on the server as well as the client. In singleplayer, your game is both.
 
-## Features
+### Features
 
-### The totem slot
+#### The totem slot
 
 - One slot directly above your offhand, with a faint totem outline when it's empty.
 - It holds one totem of undying and nothing else.
 - Shift-clicking a totem in your inventory puts it in the slot first.
 
-### The death save
+#### The death save
 
 - The slot's totem saves you when you'd otherwise die, the same way a totem in your hand does.
 - A totem in either hand is used first, then the one in the slot.
 
-### Beside the hotbar
+#### Beside the hotbar
 
 - The slot's totem shows in a small box left of your hotbar.
 
-### Use totems anywhere
+#### Use totems anywhere
 
 - When it's on, a totem anywhere in your inventory can save you after your hands and the slot. It's off by default.
 - It can also look inside shulker boxes, inside bundles, and in your ender chest. Each of those is off by default too.
 
-### With Inventory Plus
+#### With Inventory Plus
 
 - Restock refills the slot from your inventory after its totem is used.
 - The settings are on a Totem Slot tab in Inventory Plus's settings menu.
 
-## Requirements
+### Requirements
 
 - [Fabric API](https://modrinth.com/mod/fabric-api)
 - [MenuKit](https://modrinth.com/mod/menukit) 7.4.0 or newer, below 8.0.0, which draws the slot and the icon beside the hotbar.
 - [SlotKit](https://modrinth.com/mod/slotkit) 2.1.0 or newer, below 3.0.0, which adds the slot to your inventory, saves it with your player on the server, and checks that a joining player has the mod.
 
-## Pairs well with
+### Pairs well with
 
 - [Inventory Plus](https://modrinth.com/mod/inventory-plus-trevlar), my mod for restocking, sorting, and locking slots. With it, Restock refills the slot and Simple Totem Slot gets a settings tab.
 - [Simple Elytra Slot](https://modrinth.com/mod/simple-elytra-slot), my mod with the same kind of slot for an elytra. Its slot sits above this one, in one column.
 
-## Compatibility
+### Compatibility
 
 It runs on Minecraft 26.3 with Fabric. Install it on both the client and the server. A server with Simple Totem Slot turns away players who don't have it, with a message naming the mods to install.
 
-## How to use
+### How to use
 
-### The slot
+#### The slot
 
 Open your inventory. The totem slot is directly above your offhand.
 
@@ -60,19 +60,19 @@ Open your inventory. The totem slot is directly above your offhand.
 
 The slot's totem is saved with your player on the server.
 
-### The death save
+#### The death save
 
 When a hit would kill you, the slot's totem is used up instead. You're left with 1 health, you get the totem's effects and animation, and it counts for the Postmortal advancement. A totem in either hand is used before the slot's. Damage that ignores totems, like `/kill`, still kills you.
 
-### Beside the hotbar
+#### Beside the hotbar
 
 While the slot holds a totem, it shows in a small box left of your hotbar. With Simple Elytra Slot, the elytra's box sits to the left of the totem's.
 
-### Use totems anywhere
+#### Use totems anywhere
 
 With Use totems anywhere in your inventory turned on, a totem elsewhere in your inventory saves you after your hands and the slot. Your hotbar is checked first, then the rest of your inventory, then your ender chest if that box is ticked. Shulker boxes and bundles are searched too, at any depth, when their boxes are ticked.
 
-### Settings
+#### Settings
 
 The settings are on the Totem Slot tab in Inventory Plus's settings menu. Without Inventory Plus there's no settings menu, and the defaults apply. They're saved in `config/simpletotemslot/config.json`.
 
@@ -93,6 +93,6 @@ The settings are on the Totem Slot tab in Inventory Plus's settings menu. Withou
 - The three Also boxes do nothing while Use totems anywhere in your inventory is off.
 - Reset to Defaults on the tab, and Reset everything in Inventory Plus, put every setting here back.
 
-## License
+### License
 
 MIT.
